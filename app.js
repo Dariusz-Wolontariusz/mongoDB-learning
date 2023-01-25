@@ -80,3 +80,20 @@ app.delete('/books/:id', (req, res) => {
     res.status(500).send('Invalid document id')
   } 
 })
+
+app.patch('/books/:id', (req, res) => {
+  const updates = req.body
+
+  if (ObjectId.isValid(req.params.id)) {
+    db.collection('books')
+      .updateOne({_id: ObjectId(req.params.id)}, {$set: updates})
+      .then(result => {
+        res.status(200).json(result)
+      })
+      .catch(err => {
+        res.status(500).send('Could\'t update the document')
+      })
+  } else {
+    res.status(500).sent('Invalid document id')
+  }
+})
