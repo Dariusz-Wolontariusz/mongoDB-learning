@@ -51,3 +51,16 @@ app.get('/books/:id', (req, res) => {
  }
 })
 
+app.post('/books', (req, res) => {
+
+  const book = req.body
+
+  db.collection('books')
+    .insertOne(book)
+    .then(result => {
+      res.status(201).json(book)
+    })
+    .catch(err => {
+      res.status(500).send('Could not create a docoument')
+    })
+})
