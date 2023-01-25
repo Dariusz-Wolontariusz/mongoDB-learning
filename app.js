@@ -47,7 +47,7 @@ app.get('/books/:id', (req, res) => {
        res.status(500).json({err: 'Could not fetch the data'})
      })
  } else {
-  res.status(500).send('The id isn\'t valid')
+  res.status(500).send('Invalid document id')
  }
 })
 
@@ -63,4 +63,20 @@ app.post('/books', (req, res) => {
     .catch(err => {
       res.status(500).send('Could not create a docoument')
     })
+})
+
+app.delete('/books/:id', (req, res) => {
+
+  if(ObjectId.isValid(req.params.id)) {
+    db.collection('books')
+      .deleteOne({_id: ObjectId(req.params.id)})
+      .then(result => {
+        res.status(200).json(result)
+      })
+      .catch(err => {
+        res.status(500).send('Couldn\'t remove the document')
+      })
+  } else {
+    res.status(500).send('Invalid document id')
+  } 
 })
